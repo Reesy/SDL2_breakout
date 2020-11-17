@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17.3) 
 
-set(EXECUTABLE_NAME simple_sdl2_application)
+set(EXECUTABLE_NAME Breakout)
 
 project(SDL2_example LANGUAGES CXX) #set the project name and to use C++
 
@@ -24,7 +24,7 @@ endif()
 
 add_executable(${EXECUTABLE_NAME} ${MY_SOURCES})
 
-file(COPY ${MY_RESOURCES} DESTINATION ${CMAKE_BINARY_DIR})
+#file(COPY ${MY_RESOURCES} DESTINATION ${CMAKE_BINARY_DIR})
 
 if (MSVC)
 	if (CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
