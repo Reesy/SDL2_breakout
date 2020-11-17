@@ -24,7 +24,7 @@ endif()
 
 add_executable(${EXECUTABLE_NAME} ${MY_SOURCES})
 
-#file(COPY ${MY_RESOURCES} DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY ${MY_RESOURCES} DESTINATION ${CMAKE_BINARY_DIR})
 
 if (MSVC)
 	if (CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
@@ -33,7 +33,7 @@ if (MSVC)
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
     endif()
 elseif( ${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
-    set(USE_FLAGS "-s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"png\"]' -s USE_FREETYPE=1 --preload-file resources/example_texture.png")
+    set(USE_FLAGS "-s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[\"png\"]' -s USE_FREETYPE=1 --preload-file resources/circles.png")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${USE_FLAGS}")
     file(COPY "index.html" DESTINATION ${CMAKE_BINARY_DIR})
 else()
