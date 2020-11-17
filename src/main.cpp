@@ -19,6 +19,7 @@ SDL_Rect textureRect;
 SDL_Rect positionRect;
 
 bool quit = false;
+bool falling = true;
 
 const int SCREEN_WIDTH  = 640;
 const int SCREEN_HEIGHT = 480;
@@ -69,7 +70,7 @@ void init()
 	
 	//This represents where on the screen we will put the circle texture and it's size, 
 	//this will initialise it at the top left and the image will be squished to 15 x 15
-	positionRect = {0, 0, 15, 15};
+	positionRect = {(SCREEN_WIDTH / 2) - 7, 0, 15, 15};
 }
 
 void input()
@@ -95,6 +96,31 @@ void input()
 	}
 }
 
+void update()
+{
+
+	if (positionRect.y <= 0)
+	{
+		falling = true;
+	};
+
+	if (positionRect.y >= (SCREEN_HEIGHT - positionRect.h))
+	{	
+		falling = false;
+	};
+
+	if (falling)
+	{
+		positionRect.y += 5;
+	}
+	else 
+	{
+		positionRect.y -= 5;
+	}
+
+}
+
+
 void render()
 {
 	//clears previous frame.
@@ -113,11 +139,10 @@ void mainLoop()
 	//Event Polling
 	while (SDL_PollEvent(event))
 	{
-
 		input();
-		render();
 	}
-
+	update();
+	render();
 }
 
 int main(int, char**)
