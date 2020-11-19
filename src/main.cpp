@@ -24,6 +24,9 @@ bool falling = true;
 const int SCREEN_WIDTH  = 640;
 const int SCREEN_HEIGHT = 480;
 
+double t = 0.0;
+double currentTime = SDL_GetTicks();
+
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren)
 {
 	SDL_Texture *texture = IMG_LoadTexture(ren, file.c_str());
@@ -70,7 +73,10 @@ void init()
 	
 	//This represents where on the screen we will put the circle texture and it's size, 
 	//this will initialise it at the top left and the image will be squished to 15 x 15
-	positionRect = {(SCREEN_WIDTH / 2) - 7, 0, 15, 15};
+	positionRect = {(SCREEN_WIDTH / 2) - 7,  // X position - this is overcomplicated but it just puts the circle in the center of the screen.
+					0,                       // Y position - sets the circle at the top of the screen 
+					15,                      // Sets the height of the circle
+					15};                     // Sets the weidth of the circle
 }
 
 void input()
@@ -135,6 +141,9 @@ void render()
 
 void mainLoop()
 {
+	double newTime = SDL_GetTicks();
+	double frameTime = newTime - currentTime;
+	currentTime = newTime;
 
 	//Event Polling
 	while (SDL_PollEvent(event))
@@ -143,6 +152,7 @@ void mainLoop()
 	}
 	update();
 	render();
+	t += frameTime;
 }
 
 int main(int, char**)
