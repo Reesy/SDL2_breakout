@@ -25,12 +25,12 @@ const int SCREEN_WIDTH  = 640;
 const int SCREEN_HEIGHT = 480;
 
 double t = 0.0; // The initial time of the physics simulation.
-double dt = 100 * 0.6; //The interval between updating the physics. IE update physics every 100th of a second (if / 60)
+double dt = 10; //The interval between updating the physics. IE update physics every 100th of a second
 double currentTime = SDL_GetTicks(); // in miliseconds
 double accumulator = 0.0; //This will hold the accumulation of physics steps (any time left over if the graphics renders faster than the physics simulates)
 
 int previousY = 0;
-double velocity = 0.0166666666667;    
+double velocity = 1;    
 
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren)
 {
@@ -171,15 +171,6 @@ void mainLoop()
 		accumulator -= dt;
 	};
 	
-	// const double alpha = accumulator / dt;
-
-	// if (falling)
-	// {
-	// 	//positionRect.y = (positionRect.y * alpha) +( previousY * (1.0 - alpha));
-	// 	position.y = std::lerp(previousY, positionRect.y, alpha);
-	// }
-
-
 	render(); //Produces dt (takes time to calculate)
 
 	//Event Polling
