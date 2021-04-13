@@ -24,8 +24,13 @@ bool falling = true;
 const int SCREEN_WIDTH  = 640;
 const int SCREEN_HEIGHT = 480;
 
-double t = 0.0;
-double currentTime = SDL_GetTicks();
+double t = 0.0; // The initial time of the physics simulation.
+double dt = 100 * 0.6; //The interval between updating the physics. IE update physics every 100th of a second (if / 60)
+double currentTime = SDL_GetTicks(); // in miliseconds
+double accumulator = 0.0; //This will hold the accumulation of physics steps (any time left over if the graphics renders faster than the physics simulates)
+
+int previousY = 0;
+double velocity = 0.0166666666667;    
 
 SDL_Texture* loadTexture(const std::string &file, SDL_Renderer *ren)
 {
@@ -102,7 +107,9 @@ void input()
 	}
 }
 
-void update()
+
+
+void update(double dt)
 {
 
 	if (positionRect.y <= 0)
@@ -117,11 +124,13 @@ void update()
 
 	if (falling)
 	{
-		positionRect.y += 5;
+		positionRect.y += velocity * dt;
 	}
 	else 
 	{
-		positionRect.y -= 5;
+	
+		positionRect.y -= velocity * dt;
+		
 	}
 
 }
@@ -141,18 +150,43 @@ void render()
 
 void mainLoop()
 {
-	double newTime = SDL_GetTicks();
-	double frameTime = newTime - currentTime;
-	currentTime = newTime;
+	double newTime = SDL_GetTicks(); //in miliseconds
+	double frameTime = newTime - currentTime; //Essentially stores how long the previous frame ran for in miliseconds
+	
+	//limits frame time to 100th of a second
+	if (frameTime > 250) 
+	{
+		std::cout << "UPPER BOUND HIT, LAG ENCOUNTERED" << std::endl;
+		frameTime = 250; //Upper bound on the time between processing this loop. If physics simulation is slower than render calculation then the game could halt.
+	}
+
+	currentTime = newTime; 
+
+	accumulator += frameTime; 
+
+	while ( accumulator >= dt)
+	{
+		previousY = positionRect.y;
+		update(dt); //consumes dt 
+		accumulator -= dt;
+	};
+	
+	// const double alpha = accumulator / dt;
+
+	// if (falling)
+	// {
+	// 	//positionRect.y = (positionRect.y * alpha) +( previousY * (1.0 - alpha));
+	// 	position.y = std::lerp(previousY, positionRect.y, alpha);
+	// }
+
+
+	render(); //Produces dt (takes time to calculate)
 
 	//Event Polling
 	while (SDL_PollEvent(event))
 	{
 		input();
 	}
-	update();
-	render();
-	t += frameTime;
 }
 
 int main(int, char**)
